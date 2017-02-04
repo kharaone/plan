@@ -1,0 +1,44 @@
+version: "2"
+
+services:
+
+  frontend:
+    container_name: frontend
+    image: dev/frontend 
+    build:
+      context: ./services/frontend
+      dockerfile: ./docker/Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - "./services/frontend/src:/usr/frontend/src"
+      - "./services/frontend/webpack.config.js:/usr/frontend/webpack.config.js"
+      - "./services/frontend/package.json:/usr/frontend/package.json"
+      - "./services/frontend/yarn.lock:/usr/frontend/yarn.lock"
+
+  migrations:
+    container_name: migrations
+    image: dev/migrations:local
+    build:
+      context: ./services/migrations
+      dockerfile: ./docker/Dockerfile
+    environment:
+      MODE: "development"
+      MYSQL_DBNAME: "example"
+      MYSQL_USER: "root"
+      MYSQL_PASSWORD: "root"
+      MYSQL_HOST: "mysql"
+    volumes:
+      - "./services/migrations:/usr/migrations"
+    depends_on:
+      - mysql
+
+  mysql:
+    container_name: mysql
+    image: mysql:5.6
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    logging:
+      driver: none  # change to json-file if you want logs.
