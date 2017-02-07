@@ -2,7 +2,7 @@
 
 set -u
 
-# Switch directory to dev.
+# Switch directory to stack.
 cd "$(dirname "$(readlink "$0")")/.." || exit
 
 source scripts/lib/colors.sh
@@ -11,10 +11,10 @@ source scripts/lib/path.sh
 
 help() {
     echo -e "
-  Usage: dev <command> [arg] ...
+  Usage: stack <command> [arg] ...
 
-  $(bold dev) is created with $(red ❤) by the developers of Famly. This is a copy-able
-  version.
+  $(bold stack) is created with $(red ❤) by the developers of Famly. This is a copy-able
+  version that's intended to help you build your own.
 
   Options:
 
@@ -25,18 +25,16 @@ help() {
     help <command>              Output usage information for a specific command
     update                      Update famlydev
 
-  Run \`$(bold dev help command)\` for more information on specific commands.
+  Run \`$(bold stack help command)\` for more information on specific commands.
   "
 
     exit 1
 }
 
 commands() {
-    ls ./scripts/*.sh \
-    | while read -r path; do echo $(path_basename $(path_notdir ${path})) ; done \
-    | while read -r service; do [[ ${service} == "dev" ]] || echo ${service} ; done
+    ls scripts/commands/*.sh \
+    | while read -r path; do echo $(path_basename $(path_notdir ${path})) ; done
 }
-
 
 command="${1: }"
 arguments="${@:2}"
@@ -53,7 +51,7 @@ case ${command} in
         then
             help
         else
-            ./scripts/${2}.sh help
+            ./scripts/commands/${2}.sh help
         fi
         ;;
     "")
@@ -62,7 +60,7 @@ case ${command} in
     *)
         if contains "$command" "$(commands)"
         then
-            ./scripts/$command.sh $arguments
+            ./scripts/commands/$command.sh $arguments
         else
             echo ""
             echo -e "  $(red Error): Unknown command '$command'"

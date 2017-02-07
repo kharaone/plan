@@ -2,12 +2,28 @@ version: "2"
 
 services:
 
+  backend:
+    container_name: backend
+    image: dev/backend
+    build:
+      context: ./services/backend
+      dockerfile: ./docker/Dockerfile
+    ports:
+      - "8081:8000"
+    volumes:
+      - "./services/backend/src:/workspace/src"
+      - "./services/backend/requirements.txt:/workspace/requirements.txt"
+    env_file:
+      - "./environment/local.env"
+
   frontend:
     container_name: frontend
-    image: dev/frontend 
+    image: dev/frontend
     build:
       context: ./services/frontend
       dockerfile: ./docker/Dockerfile
+    env_file:
+      - "./environment/local.env"
     ports:
       - "8080:8080"
     volumes:
@@ -22,12 +38,8 @@ services:
     build:
       context: ./services/migrations
       dockerfile: ./docker/Dockerfile
-    environment:
-      MODE: "development"
-      MYSQL_DBNAME: "example"
-      MYSQL_USER: "root"
-      MYSQL_PASSWORD: "root"
-      MYSQL_HOST: "mysql"
+    env_file:
+      - "./environment/local.env"
     volumes:
       - "./services/migrations:/usr/migrations"
     depends_on:

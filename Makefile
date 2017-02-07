@@ -5,12 +5,12 @@ build_dir := .build
 
 services := $(shell docker-compose config --services 2>/dev/null)
 
-devscript := /usr/local/bin/dev
-devscript_completions := /usr/local/share/zsh/site-functions/_dev
+stack := /usr/local/bin/stack
+stack_completions := /usr/local/share/zsh/site-functions/_stack
 
 setup_targets := \
-	$(devscript) \
-	$(devscript_completions)
+	$(stack) \
+	$(stack_completions)
 
 build_targets =	\
 	$(addprefix $(build_dir)/, $(addsuffix .build, $(services)))
@@ -25,9 +25,12 @@ setup: $(setup_targets)
 # Build local docker images.
 build: setup $(build_targets)
 
+clean:
+	rm -rf $(build_dir)
+
 # Boot up current stack
 up: build
-up: 
+up:
 	docker-compose up
 
 # This is a target to help you debug the Makefile whenever things
@@ -42,24 +45,20 @@ print-%: ; @echo $* is $($*)
 
 ### setup
 
-$(devscript):
-	$(call print, Linking devs, $@ -> scripts/dev.sh)
-	$(QUIET)ln -s $(abspath scripts/dev.sh) $@
+$(stack):
+	$(call print, Linking script, $@ -> scripts/stack.sh)
+	$(QUIET)ln -s $(abspath scripts/stack.sh) $@
 
-$(devscript_completions):
-	$(call print, Linking devs zsh completions, $@ -> scripts/dev.completions)
-	$(QUIET)ln -s $(abspath scripts/dev.completions) $@
+$(stack_completions):
+	$(call print, Linking zsh completions, $@ -> scripts/stack.completions)
+	$(QUIET)ln -s $(abspath scripts/stack.completions) $@
 
 ### docker images
 
-$(build_dir)/frontend.build: $(wildcard ./services/frontend/docker/*)
-	$(call print, Building docker image, frontend - $(notdir $?) changed)
-	$(QUIET)docker-compose build frontend
-	$(call touch, $@)
-
-$(build_dir)/migrations.build: $(wildcard ./services/migrations/docker/*)
-	$(call print, Building docker image, migrations - $(notdir $?) changed)
-	$(QUIET)docker-compose build migrations
+# Generic rule to build a service
+$(build_dir)/%.build: $(wildcard ./services/%/docker/*)
+	$(call print, Building docker image, $* - $(notdir $?) changed)
+	$(QUIET)docker-compose build $*
 	$(call touch, $@)
 
 # Service declarations that we don't want to consider rebuilding.

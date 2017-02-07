@@ -33,7 +33,11 @@ module.exports = function (env) {
                                 cacheDirectory: true
                             }
                         }
-                    ],
+                    ]
+                },
+                {
+                    test: /\.css$/,
+                    use: ['style-loader', 'css-loader']
                 }
             ]
         },
@@ -50,10 +54,14 @@ module.exports = function (env) {
                 minChunks: Infinity,
                 filename: 'vendor.bundle.js'
             }),
+            new webpack.DefinePlugin({
+                '__API_PROTOCOL__': `'${process.env.API_PROTOCOL}'`,
+                '__API_HOST__': `'${process.env.API_HOST}'`,
+                '__API_PORT__': `'${process.env.API_PORT}'`
+            })
         ],
         devServer: {
             contentBase: './src',
-            historyApiFallback: true,
             port: 8080,
             compress: false,
             inline: true,

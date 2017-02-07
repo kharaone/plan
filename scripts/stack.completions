@@ -1,0 +1,45 @@
+#compdef stack
+
+_stack() {
+    local curcontext="$curcontext" state line
+    typeset -A opt_args
+
+    # Fairly hacky. We know that _stack is linked to this script inside
+    # of the stack repository. We use this to figure out where stack
+    # was cloned and switch to that directory.
+    local stack_home="$(dirname $(readlink /usr/local/share/zsh/site-functions/_stack))/.."
+
+    source "${stack_home}/scripts/lib/functional.sh"
+    source "${stack_home}/scripts/lib/path.sh"
+
+    local commands=$(
+        ls "${stack_home}"/scripts/commands/*.sh \
+        | while read -r path; do echo $(path_basename $(path_notdir ${path})) ; done \
+    )
+
+    _arguments \
+        "1: :->command"\
+        "*: :->arguments"
+
+    case $state in
+        command)
+            _arguments "1: :($commands help)"
+        ;;
+        *)
+            command=$words[2]
+            if contains "$command" "$commands"
+            then
+                # Each script expects to execute in the context of the stack directory. We switch to that
+                # directory in a subshell ot avoid annoying the user.
+                compadd "$@" $(cd "${stack_home}" && "./scripts/commands/${command}.sh" completions $words[3])
+            elif [[ "${command}" == "help" ]]
+            then
+                compadd "$@" $(echo ${commands})
+            fi
+            # This is intentially left blank. We don't want to fallback to
+            # file-system completions.
+            ;;
+    esac
+}
+
+_stack "%@"
