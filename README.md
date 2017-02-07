@@ -1,5 +1,15 @@
 # Stack
-TODO: Write an introduction
+To give it a spin run the following commands in your shell
+
+```bash
+git clone git@github.com:famly/stack && cd stack
+make setup
+stack up
+```
+
+This will build all the Docker images and then start the containers. Open
+`localhost:8080`  in your browser and you should see a little introduction
+and a guide on how to create your first migration.
 
 ## Features
 
