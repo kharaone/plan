@@ -1,46 +1,41 @@
 # Stack
-This is an open-source verison of our internal development tool *famlydev*. This
-repository is meant to be forked, cloned, and modified in any way you please; it's
-simply providing a starting point for you to hack around with. If you've found a
-way to improve upon it then feel free to send a pull request ❤️
+famly/stack is an example of how you can use [Docker][docker], [Make][make], and
+[Bash][bash] to automate your entire development environment and provide a
+nice CLI for common workflows. It's an open-source verison of our internal
+development tool at [Famly][famly] called *famlydev*. This repository is meant to be forked,
+cloned, and modified in any way you please; it's simply providing a starting point for you to
+hack around with. If you've found a way to improve upon it then feel free to send
+us a pull request ❤️
 
 If you want to know more about the background of *famlydev* and what problems
-we're trying to solve then head this [blog post][blogpost] by [@mads-hartmann][mads].
+we're trying to solve then read this [blog post][blogpost] by [@mads-hartmann][mads].
 
-To give it a spin run the following commands in your shell
+## What's in the box
+Stack consists of Makefile, a couple of docker-compose.yml files, and a collection of
+Bash scripts.
 
-```bash
-git clone git@github.com:famly/stack && cd stack
-make setup
-stack up
-```
+The Makefile knows when and how to rebuild the docker images and how to perform the initial setup of the system, for example, during setup it will link a script,
+named `stack`, into `/usr/local/bin`. This script is your interface to your entire
+development environment. `stack` provides useful `help` commands (e.g. `stack help kick`) and,
+if you're using Zsh, has tab-completions for all commands. To add new commands to `stack`
+you simply have to place a bash file in the folder `scripts/commands` that follows a
+specific interface (see some of the other files for examples).
 
-This will build all the Docker images and then start the containers. Open
-`localhost:8080`  in your browser and you should see a little introduction
-and a guide on how to create your first migration.
+The `presets/*.yml` files are used to specify various subsets of your
+services. At [Famly][famly] we have three at the moment: fullstack, frontend, backend.
+You can switch between them using the `switch` command (e.g. `stack switch frontend`). We're
+working on a more granular way to specify which services to run but haven't found a good
+solution yet.
 
-To see what else stack can do run `stack help`.
-
-## Features
-
-- Tab completion. Although it's just for ZSH for now.
-
-## Commands
-
-## Services
-The services inside of `./services/` are simply small proof's of concepts. Here's a short
-description of each service
-
-- **migrations**: This service applies SQL migration to the MySQL instance. When running in
-  development mode it will re-apply migrations if they've changed.
-
-- **backend**: A tiny Python backend that reads from the MySQL database.
-
-- **frontend**: A tiny React based frontend that's built using Webpack 2. It quires the backend
-  for data.
+A tool for managing your development environment isn't very useful if you don't have a
+couple of services to manage so the repository also contains a few of servies: A small
+python backend, a small frontend, and a service that runs migrations whenever a new SQL file
+is added to `services/migrations/sql`. These services are merely here as examples and should
+be thrown away if you want to use stack for your own projects (though the migrations service might be useful).
 
 ## Requirements
-You need to have [Docker][docker] installed.
+You need to have [Docker][docker] installed. If you're using [Homebrew][homebrew] simply run
+the following command. Otherwise look [here][docker-install-instructions]
 
 ```bash
 brew install docker
@@ -49,8 +44,22 @@ brew install docker
 For tab-completion to work in your shell you need to be running [Zsh][zsh]
 for now.
 
-**TODO**: I think you need to have something in your zsh config for completion functions
-to be called. We should figure out what and add it here.
+## Installation & Usage
+To give it a spin run the following commands in your shell.
+
+```bash
+git clone git@github.com:famly/stack && cd stack
+make setup
+stack up
+```
+
+This will build all the Docker images and start the containers. Open
+`localhost:8080` in your browser and you should see a little introduction
+and a guide.
+
+To see what else stack can do run `stack help`.
+
+### Commands
 
 ## Contribute
 If you'd like to contribute but need some inspiration then take a look
@@ -77,22 +86,22 @@ adding yet.
   environment file and load it in the entrypoint instead and add it to
   the list of files that inotify listens for.
 
+## FAQ
+
+- **How is this different from using docker-compose directly**
+
+
 ## TODO
-- [x] Create a backend service. Node is probably easiest.
-- [x] Hook frontend up with the backend
-- [x] Figure out why ZSH completions no longer work.
-- [ ] Port over missing command
-      - [ ] db
-      - [ ] dockerclean (or similar)
-      - [ ] time
-      - [ ] update?
-- [x] Port over environment variables file
-- [x] Add a ln -s from docker-compose.yml -> presets/fullstack.yml to git. then add docker-compose.yml to .gitignore
 - [ ] Switch everything to be named stack.
 - [ ] Finish the help command of stack.
 - [ ] Write introduction README
+  - [ ] Add a screenshot
+- [ ] Listen to SIGTERM for all containers
 
+[famly]: https://famly.co
 [docker]: https://www.docker.com/
+[make]: https://www.gnu.org/software/make/
+[bash]: https://www.gnu.org/software/bash/
 [zsh]: http://www.zsh.org/
 [blogpost]: http://mads-hartmann.com/2017/01/15/automating-developer-environments.html
 [mads]: https://github.com/mads-hartmann
