@@ -13,17 +13,29 @@ help() {
     echo -e "
   Usage: stack <command> [arg] ...
 
-  $(bold stack) is created with $(red ❤) by the developers of Famly. This is a copy-able
-  version that's intended to help you build your own.
-
-  Options:
-
-    -h, --help                  Output usage information
+  $(bold stack) is created with $(red ❤) by the developers of Famly.
+  This is a copy-able version that's intended to help you build your own.
 
   Commands:
-
     help <command>              Output usage information for a specific command
-    update                      Update famlydev
+
+  Managing the stack:
+    up                          Prepare and run the development stack
+    build                       Build images if necessary
+    switch <environment>        Switch the development stack
+    follow                      Follow logs
+    status                      Gives a brief overview of the development environment
+
+  Managing indiviual services:
+    kick <service>              Kick a service and hope it helps (sends SIGHUP)
+    attach <service>            Start a Bash shell inside the container
+    restart <service>           Restart a specific container
+
+  Infrastructure:
+    db <command>                Manipulate the database
+
+  Miscellaneous:
+    time                        Tell the Docker Daemon what the time is
 
   Run \`$(bold stack help command)\` for more information on specific commands.
   "
