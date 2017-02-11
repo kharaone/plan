@@ -101,6 +101,13 @@ adding yet.
   environment file and load it in the entrypoint instead and add it to
   the list of files that inotify listens for.
 
+- **Remove duplication of service declarations**: Currently you have to
+  define a `preset/x.yml` file for each combination of services you want
+  to run. This currently means you might define a service multiple times
+  wich is cumbersome and annoying to maintain. It would be great if you
+  could just specify a service once and then specify which services to run
+  in a different way.
+
 ## FAQ
 
 - **How is this different from using docker-compose directly**
