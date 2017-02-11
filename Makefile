@@ -56,7 +56,8 @@ $(stack_completions):
 ### docker images
 
 # Generic rule to build a service
-$(build_dir)/%.build: $(wildcard ./services/%/docker/*)
+.SECONDEXPANSION:
+$(build_dir)/%.build: $$(wildcard ./services/%/docker/*)
 	$(call print, Building docker image, $* - $(notdir $?) changed)
 	$(QUIET)docker-compose build $*
 	$(call touch, $@)
