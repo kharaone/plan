@@ -15,7 +15,7 @@ If you want to know more about the background
 of [famly/plan][famly/plan] and what problems we're trying to solve
 then read this [blog post][blog-post] by [@mads-hartmann][mads].
 
-## Goal
+## Overall goal
 The goal we're trying to achieve is to have a 100% automatic way to to
 setup and run your entire development stack locally. Once it's running
 it should be reacting to code and configuration changes automatically.
