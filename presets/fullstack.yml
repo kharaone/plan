@@ -34,7 +34,7 @@ services:
 
   migrations:
     container_name: migrations
-    image: dev/migrations:local
+    image: dev/migrations
     build:
       context: ./services/migrations
       dockerfile: ./docker/Dockerfile
