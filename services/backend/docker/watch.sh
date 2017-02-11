@@ -12,14 +12,8 @@ db_password=${MYSQL_PASSWORD:-"root"}
 ## functions
 
 run_pip() {
-    if md5sum -c -s .requirements.checksum.txt;
-    then
-        echo 'Skipping PIP packages'
-    else
-        echo 'Installing pip packages'
-        pip install --egg --no-cache-dir -r requirements.txt
-        md5sum requirements.txt > .requirements.checksum.txt
-    fi;
+    echo 'Installing pip packages'
+    pip install --egg -r requirements.txt
 }
 
 wait_for_db() {
@@ -37,7 +31,12 @@ wait_for_db() {
 }
 
 start_server() {
-    python src/app.py
+    python src/app.py &
+}
+
+reboot() {
+    echo "Shutting down python server"
+    pkill python
 }
 
 wait_for_filechange() {
@@ -48,29 +47,27 @@ wait_for_filechange() {
     echo "This changed: $i"
 }
 
+sigterm_handler() {
+    echo "Caught SIGTERM"
+    exit 0
+}
+
 sighup_handler() {
     echo "Caught SIGHUP."
-    pkill python
     pkill inotifyd
 }
 
 ## main
 
-if [ $# -eq 0 ]; then
-# If no CMD is specified then start Apache once the environment is
-# ready.
-    cd /workspace
+cd /workspace
 
-    trap "sighup_handler" HUP
+trap "sigterm_handler" TERM
+trap "sighup_handler" HUP
 
-    while true; do
-        run_pip
-        wait_for_db
-        start_server
-        wait_for_filechange
-    done
-else
-# Otherwise run the CMD in shell. This makes it possible to use docker
-# exec to get a shell and debug the running container.
-    exec "$@"
-fi
+while true; do
+    run_pip
+    wait_for_db
+    start_server
+    wait_for_filechange
+    reboot
+done

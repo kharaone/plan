@@ -13,12 +13,11 @@ ENV PYTHONPATH="/workspace/src":$PYTHONPATH
 
 # Install pip packges
 COPY requirements.txt .
-RUN pip install --egg --no-cache-dir -r requirements.txt
-RUN md5sum requirements.txt > .requirements.checksum.txt
+RUN pip install --egg -r requirements.txt
 
 # Copy over source code
 COPY src /workspace/src
 
 # Entrypoint
-COPY docker/docker-entrypoint.sh /
-ENTRYPOINT ["/docker-entrypoint.sh"]
+COPY docker/watch.sh /
+CMD ["/watch.sh"]
