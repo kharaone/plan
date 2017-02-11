@@ -18,5 +18,5 @@ COPY yarn.lock .
 RUN yarn install --pure-lockfile --no-progress
 
 # Entrypoint
-COPY docker/docker-entrypoint.sh /
-ENTRYPOINT ["/docker-entrypoint.sh"]
+COPY docker/watch.sh /
+ENTRYPOINT ["/watch.sh"]

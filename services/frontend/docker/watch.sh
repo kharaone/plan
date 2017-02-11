@@ -1,10 +1,6 @@
 #!/bin/bash
 
-if [ $# -eq 0 ]; then
-    # We only care about undefined variables when running
-    # the standard command.
-    set -u
-fi
+set -u
 
 ## variables
 
@@ -39,26 +35,28 @@ kill_processes() {
     echo "Killing Webpack with PID ${webpack_server_pid}"
     kill -2 ${webpack_server_pid}
     wait ${webpack_server_pid}
+}
+
+sigterm_handler() {
+    echo "Caught SIGTERM"
+    exit 0
+}
+
+sighup_handler() {
+    echo "Caught SIGHUP"
     pkill inotifyd
 }
 
 ## Main
 
-if [ $# -eq 0 ]; then
-# If no CMD is specified then start the development server
-    cd /usr/frontend
+cd /usr/frontend
 
-    trap "sighup_handler" HUP
+trap "sighup_handler" HUP
+trap "sigterm_handler" TERM
 
-    while true; do
-        install_dependencies
-        start_webpack_in_background
-        wait_for_filechange
-        kill_processes
-    done
-else
-# Otherwise run the CMD in shell. This makes it possible to use docker
-# exec to get a shell and debug the running container.
-    echo "Running command '$@'"
-    exec "$@"
-fi
+while true; do
+    install_dependencies
+    start_webpack_in_background
+    wait_for_filechange
+    kill_processes
+done

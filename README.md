@@ -145,9 +145,6 @@ adding yet.
   repositories.
 
 
-## TODO
-- [ ] Listen to SIGTERM for all containers
-
 [famly]: https://famly.co
 [famly/plan]: https://github.com/famly/plan
 [docker]: https://www.docker.com/
