@@ -35,7 +35,7 @@ environment -- if you can put something in a README it's likely you
 can automate it as well 😉
 
 ## What's in the box
-Plan consists of Makefile, a couple of docker-compose.yml files, and a
+famly/plan consists of Makefile, a couple of docker-compose.yml files, and a
 collection of Bash scripts.
 
 The Makefile knows when and how to rebuild the docker images and how
@@ -88,23 +88,45 @@ This will build all the Docker images and start the containers. Open
 `localhost:8080` in your browser and you should see a little
 introduction and a guide.
 
-### Commands
-You can always get an overview of the available commands through
-tab-completion or by using the `plan help` command.
+Run `plan help` to see what commands are available. Run `plan kick backend`
+to see what happens. Try changing some of the frontend or backend files.
+Try changing one of these files `package.json`, `requirements.txt`,
+`webpack.config.js`.
 
-- **up** Prepare and run the current plan
-- **build** Build images if necessary
-- **switch `<name>`** Switch to a different plan
-- **follow** Follow logs
-- **status** Gives a brief overview of the development environment
-- **kick `<service>`** Kick a service and hope it helps (sends SIGHUP)
-- **attach `<service>`** Start a Bash shell inside the container
-- **restart `<service>`** Restart a specific container
-- **db `<command>`** Manipulate the database
-- **time** Synchronize the Docker VMs time with the host system
+## Using famly/plan for your own projects
+You'll need to define your own `Dockerfile`s and `watch.sh` scripts
+for your services. In order to work nicely with this system it's
+important that you follow the same guidelines as the ones in
+`./services`. The guidelines for each service are the following:
 
-To get more information about the specific command run `plan help
-<command>`.
+  - Keep all Docker related files in a sub-folder named docker. This
+    means you'll get the Make rules for free that figure out when to
+    rebuild images.
+
+  - Keep all source & configuration files out of the `Dockerfile`. The
+    images should simply contain the tools that are required to
+    install library dependencies, run your code etc. (notice how we
+    don't add source files in the services, we mount in the files
+    instead)
+
+  - Your `Dockerfile` should use `CMD ["/watch.sh"]` as the default
+    command. Your `watch.sh` script should trap SIGTERM signals and
+    exit. If you do these two things your services will shutdown
+    quickly. See this [blog-post][stop-containers-in-a-hurry] for
+    more details.
+
+  - Your `watch.sh` script should trap SIGHUP signals and do a soft
+    reboot; that is, kill all processes and start over. This will
+    allow your container to respond to the `kick` command. This
+    command is nice to have as sometimes when you switch between
+    branches with many changes you might end up in situations where
+    the container gets confused; in those cases it's nice to be able
+    to give it a kick instead of a full restart.
+
+  - Generally follow the structure of the other `watch.sh` scripts.
+    Install library dependencies, start your services and keep track
+    of their PIDs, block until configuration files changes, then do the
+    whole thing over again.
 
 ## Possible Contributions
 If you'd like to contribute but need some inspiration then take a look
@@ -155,4 +177,5 @@ adding yet.
 [zsh]: http://www.zsh.org/
 [homebrew]: http://brew.sh/
 [blog-post]: http://mads-hartmann.com/2017/01/15/automating-developer-environments.html
+[stop-containers-in-a-hurry]: https://serialized.net/2015/05/stopping-docker-containers-in-a-hurry/
 [mads]: https://github.com/mads-hartmann
