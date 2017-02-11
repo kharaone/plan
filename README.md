@@ -44,6 +44,21 @@ and a service that runs migrations whenever a new SQL file is added to
 and should be thrown away if you want to use plan for your own
 projects (though the migrations service might be useful).
 
+## Goal
+The goal we're trying to achieve is to have a 100% automatic way to to
+setup and run your entire development stack locally. Once it's running
+it should be reacting to code changes automatically. For example, the
+Python backend will run the newest code on each request and the
+frontend will reload the browser whenever you change any of the files
+(Haven't enabled HMR in this example, but feel free to add it). The
+migrations container will automatically run migrations when you add
+new files and re-run them when they change.
+
+The overall philosophy is that the developer should be able to focus
+on the task at hand rather than the mechanics of the developer
+environment -- if you can put something in a README it's likely you
+can automate it as well 😉
+
 ## Requirements
 You need to have [Docker][docker] installed. If you're
 using [Homebrew][homebrew] simply run the following command.
