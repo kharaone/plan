@@ -52,7 +52,10 @@ Python backend will run the newest code on each request and the
 frontend will reload the browser whenever you change any of the files
 (Haven't enabled HMR in this example, but feel free to add it). The
 migrations container will automatically run migrations when you add
-new files and re-run them when they change.
+new files and re-run them when they change. If you change
+`services/backend/requirements.txt` or `services/frontend/package.json`
+the containers will re-install dependencies and restart their internal
+processes; the developer doesn't have to do anything.
 
 The overall philosophy is that the developer should be able to focus
 on the task at hand rather than the mechanics of the developer
