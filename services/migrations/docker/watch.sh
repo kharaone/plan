@@ -60,7 +60,7 @@ ensure_db_exists() {
 
 run_migrations() {
     echo "Running Migrations"
-    ./src/migrate.sh all
+    ./src/migrate.sh migrate
 }
 
 wait_for_filechange() {
@@ -76,28 +76,26 @@ wait_for_filechange() {
     fi
 }
 
+sigterm_handler() {
+    echo "Caught SIGTERM"
+    exit 0
+}
+
 sighup_handler() {
-    echo "Caught SIGHUP."
+    echo "Caught SIGHUP"
     pkill inotifyd
 }
 
 ## main
 
-if [ $# -eq 0 ]; then
-# If no CMD is specified then start Apache once the environment is
-# ready.
-    cd /usr/migrations
+cd /usr/migrations
 
-    trap "sighup_handler" HUP
+trap "sighup_handler" HUP
+trap "sigterm_handler" TERM
 
-    while true; do
-        wait_for_db
-        ensure_db_exists
-        run_migrations
-        wait_for_filechange
-    done
-else
-# Otherwise run the CMD in shell. This makes it possible to use docker
-# exec to get a shell and debug the running container.
-    exec "$@"
-fi
+while true; do
+    wait_for_db
+    ensure_db_exists
+    run_migrations
+    wait_for_filechange
+done

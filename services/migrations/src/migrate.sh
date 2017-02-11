@@ -39,6 +39,12 @@ check_state() {
     fi
 }
 
+drop_database() {
+    echo "Dropping database ${db_name}"
+    mysql -h ${db_host} -u${db_user} -p${db_password} -D ${db_name} -s -N -e \
+        "DROP DATABASE ${db_name}"
+}
+
 apply_migration() {
     filename=$1
     checksum=$2
@@ -109,12 +115,17 @@ run_all_migrations() {
 }
 
 case "${1: }" in
-    "all")
+    "migrate")
         run_all_migrations
         ;;
     "apply")
         echo "Applying ${2}"
         reapply_migration "${2}"
         ;;
-    "clar") ;;
+    "clean")
+        drop_database
+        ;;
+    *)
+        echo "Unknown command ${1}"
+        ;;
 esac

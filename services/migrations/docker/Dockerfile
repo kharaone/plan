@@ -8,5 +8,5 @@ RUN mkdir -p /usr/migrations
 WORKDIR /usr/migrations
 
 # Entrypoint
-COPY docker/docker-entrypoint.sh /
-ENTRYPOINT ["/docker-entrypoint.sh"]
+COPY docker/watch.sh /
+CMD ["/watch.sh"]
