@@ -9,6 +9,7 @@ plan := /usr/local/bin/plan
 plan_completions := /usr/local/share/zsh/site-functions/_plan
 
 setup_targets := \
+	docker-compose.yml \
 	$(plan) \
 	$(plan_completions)
 
@@ -52,6 +53,10 @@ $(plan):
 $(plan_completions):
 	$(call print, Linking zsh completions, $@ -> scripts/plan.completions)
 	$(QUIET)ln -s $(abspath scripts/plan.completions) $@
+
+docker-compose.yml:
+	$(call print, Default docker-compose.yml, $@ -> ./presets/fullstack.yml)
+	$(QUIET)ln -s ./presets/fullstack.yml docker-compose.yml
 
 ### docker images
 
