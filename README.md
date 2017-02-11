@@ -15,6 +15,25 @@ If you want to know more about the background
 of [famly/plan][famly/plan] and what problems we're trying to solve
 then read this [blog post][blog-post] by [@mads-hartmann][mads].
 
+## Goal
+The goal we're trying to achieve is to have a 100% automatic way to to
+setup and run your entire development stack locally. Once it's running
+it should be reacting to code and configuration changes automatically.
+For example, the Python backend will run the newest code on each
+request and the frontend will reload the browser whenever you change
+any of the files (Haven't enabled HMR in this example, but feel free
+to add it). The migrations container will automatically run migrations
+when you add new files and re-run them when they change. If you change
+`services/backend/requirements.txt` or
+`services/frontend/package.json` the containers will re-install
+dependencies and restart their internal processes; the developer
+doesn't have to do anything.
+
+The overall philosophy is that the developer should be able to focus
+on the task at hand rather than the mechanics of the developer
+environment -- if you can put something in a README it's likely you
+can automate it as well 😉
+
 ## What's in the box
 Plan consists of Makefile, a couple of docker-compose.yml files, and a
 collection of Bash scripts.
@@ -25,16 +44,17 @@ it will link a script, named `plan`, into `/usr/local/bin`. This
 script is your interface to your entire development environment.
 `plan` provides useful `help` commands (e.g. `plan help kick`) and, if
 you're using Zsh, has tab-completions for all commands. To add new
-commands to `plan` you simply have to place a bash file in the folder
+commands to `plan` you simply have to place a bash script in the folder
 `scripts/commands` that follows a specific interface (see some of the
-other files for examples).
+other files for examples) and you're done.
 
 The `presets/*.yml` files are used to specify various subsets of your
 services. At [Famly][famly] we have three at the moment: fullstack,
 frontend, backend. You can switch between them using the `switch`
 command (e.g. `plan switch backend`). We're working on a more granular
 way to specify which services to run but haven't found a good solution
-yet.
+yet. `switch` is simply creating a symlink from `docker-compose.yml` to
+the specific preset.
 
 A tool for managing your development environment isn't very useful if
 you don't have a couple of services to manage so the repository also
@@ -43,24 +63,6 @@ and a service that runs migrations whenever a new SQL file is added to
 `services/migrations/sql`. These services are merely here as examples
 and should be thrown away if you want to use plan for your own
 projects (though the migrations service might be useful).
-
-## Goal
-The goal we're trying to achieve is to have a 100% automatic way to to
-setup and run your entire development stack locally. Once it's running
-it should be reacting to code changes automatically. For example, the
-Python backend will run the newest code on each request and the
-frontend will reload the browser whenever you change any of the files
-(Haven't enabled HMR in this example, but feel free to add it). The
-migrations container will automatically run migrations when you add
-new files and re-run them when they change. If you change
-`services/backend/requirements.txt` or `services/frontend/package.json`
-the containers will re-install dependencies and restart their internal
-processes; the developer doesn't have to do anything.
-
-The overall philosophy is that the developer should be able to focus
-on the task at hand rather than the mechanics of the developer
-environment -- if you can put something in a README it's likely you
-can automate it as well 😉
 
 ## Requirements
 You need to have [Docker][docker] installed. If you're
