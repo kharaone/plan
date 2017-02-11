@@ -5,12 +5,12 @@ build_dir := .build
 
 services := $(shell docker-compose config --services 2>/dev/null)
 
-stack := /usr/local/bin/stack
-stack_completions := /usr/local/share/zsh/site-functions/_stack
+plan := /usr/local/bin/plan
+plan_completions := /usr/local/share/zsh/site-functions/_plan
 
 setup_targets := \
-	$(stack) \
-	$(stack_completions)
+	$(plan) \
+	$(plan_completions)
 
 build_targets =	\
 	$(addprefix $(build_dir)/, $(addsuffix .build, $(services)))
@@ -28,7 +28,7 @@ build: setup $(build_targets)
 clean:
 	rm -rf $(build_dir)
 
-# Boot up current stack
+# Boot up current plan
 up: build
 up:
 	docker-compose up
@@ -45,13 +45,13 @@ print-%: ; @echo $* is $($*)
 
 ### setup
 
-$(stack):
-	$(call print, Linking script, $@ -> scripts/stack.sh)
-	$(QUIET)ln -s $(abspath scripts/stack.sh) $@
+$(plan):
+	$(call print, Linking script, $@ -> scripts/plan.sh)
+	$(QUIET)ln -s $(abspath scripts/plan.sh) $@
 
-$(stack_completions):
-	$(call print, Linking zsh completions, $@ -> scripts/stack.completions)
-	$(QUIET)ln -s $(abspath scripts/stack.completions) $@
+$(plan_completions):
+	$(call print, Linking zsh completions, $@ -> scripts/plan.completions)
+	$(QUIET)ln -s $(abspath scripts/plan.completions) $@
 
 ### docker images
 

@@ -7,7 +7,7 @@ source scripts/lib/functional.sh
 
 help() {
     echo -e "
-  Usage: famlydev switch <environment>
+  Usage: plan switch <environment>
 
   $(bold switch) is used to between the various development stacks
   "

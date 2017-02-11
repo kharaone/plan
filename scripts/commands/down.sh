@@ -6,7 +6,7 @@ source scripts/lib/colors.sh
 
 help() {
     echo -e "
-  Usage: famlydev up
+  Usage: plan up
 
   $(bold up) starts the current environment stack.
   "

@@ -6,7 +6,7 @@ source scripts/lib/colors.sh
 
 help() {
     echo -e "
-  Usage: famlydev follow
+  Usage: plan follow
 
   $(bold follow) follows logs
   "

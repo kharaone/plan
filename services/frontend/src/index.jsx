@@ -20,9 +20,9 @@ const Application = (props) => {
 
 const Introduction = () => (
     <div className="headline">
-        <h1>Welcome to <strong>stack</strong></h1>
+        <h1>Welcome to <strong>famly/plan</strong></h1>
         <p>
-            Stack helps you automate your development environment.
+            Plan helps you automate your development environment.
             This is just a very simple app to help you get the feel of how it works.
             The application displays messages that it gets from a Python backend.
             The backend reads messages from a MySQL database.

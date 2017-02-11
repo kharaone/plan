@@ -8,7 +8,7 @@ source scripts/lib/functional.sh
 
 help() {
     echo -e "
-  Usage: stack db <command>
+  Usage: plan db <command>
 
   $(bold db) Is used to manipulate the database in various ways.
   "

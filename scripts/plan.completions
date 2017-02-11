@@ -1,19 +1,20 @@
-#compdef stack
+#compdef plan
 
-_stack() {
+_plan() {
+
     local curcontext="$curcontext" state line
     typeset -A opt_args
 
-    # Fairly hacky. We know that _stack is linked to this script inside
-    # of the stack repository. We use this to figure out where stack
+    # Fairly hacky. We know that _plan is linked to this script inside
+    # of the plan repository. We use this to figure out where plan
     # was cloned and switch to that directory.
-    local stack_home="$(dirname $(readlink /usr/local/share/zsh/site-functions/_stack))/.."
+    local plan_home="$(dirname $(readlink /usr/local/share/zsh/site-functions/_plan))/.."
 
-    source "${stack_home}/scripts/lib/functional.sh"
-    source "${stack_home}/scripts/lib/path.sh"
+    source "${plan_home}/scripts/lib/functional.sh"
+    source "${plan_home}/scripts/lib/path.sh"
 
     local commands=$(
-        ls "${stack_home}"/scripts/commands/*.sh \
+        ls "${plan_home}"/scripts/commands/*.sh \
         | while read -r path; do echo $(path_basename $(path_notdir ${path})) ; done \
     )
 
@@ -29,9 +30,9 @@ _stack() {
             command=$words[2]
             if contains "$command" "$commands"
             then
-                # Each script expects to execute in the context of the stack directory. We switch to that
+                # Each script expects to execute in the context of the plan directory. We switch to that
                 # directory in a subshell ot avoid annoying the user.
-                compadd "$@" $(cd "${stack_home}" && "./scripts/commands/${command}.sh" completions $words[3])
+                compadd "$@" $(cd "${plan_home}" && "./scripts/commands/${command}.sh" completions $words[3])
             elif [[ "${command}" == "help" ]]
             then
                 compadd "$@" $(echo ${commands})
@@ -42,4 +43,4 @@ _stack() {
     esac
 }
 
-_stack "%@"
+_plan "%@"

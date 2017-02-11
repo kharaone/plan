@@ -8,7 +8,7 @@ source scripts/lib/functional.sh
 
 help() {
     echo -e "
-  Usage: famlydev kick <service>
+  Usage: plan kick <service>
 
   $(bold kick) is used give a service a soft kick.
 

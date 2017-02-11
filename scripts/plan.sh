@@ -2,7 +2,7 @@
 
 set -u
 
-# Switch directory to stack.
+# Switch directory to plan.
 cd "$(dirname "$(readlink "$0")")/.." || exit
 
 source scripts/lib/colors.sh
@@ -11,18 +11,18 @@ source scripts/lib/path.sh
 
 help() {
     echo -e "
-  Usage: stack <command> [arg] ...
+  Usage: plan <command> [arg] ...
 
-  $(bold stack) is created with $(red ❤) by the developers of Famly.
+  $(bold plan) is created with $(red ❤) by the developers of Famly.
   This is a copy-able version that's intended to help you build your own.
 
   Commands:
     help <command>              Output usage information for a specific command
 
-  Managing the stack:
-    up                          Prepare and run the development stack
+  Managing the plan:
+    up                          Prepare and run the current plan
     build                       Build images if necessary
-    switch <environment>        Switch the development stack
+    switch <environment>        Switch to a different plan
     follow                      Follow logs
     status                      Gives a brief overview of the development environment
 
@@ -37,7 +37,7 @@ help() {
   Miscellaneous:
     time                        Tell the Docker Daemon what the time is
 
-  Run \`$(bold stack help command)\` for more information on specific commands.
+  Run \`$(bold plan help command)\` for more information on specific commands.
   "
 
     exit 1

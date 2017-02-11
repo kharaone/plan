@@ -6,7 +6,7 @@ source scripts/lib/colors.sh
 
 help() {
     echo -e "
-  Usage: stack time
+  Usage: plan time
 
   $(bold time) synchronizes the time in the Docker VM with the host
   "

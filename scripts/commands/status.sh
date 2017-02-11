@@ -7,20 +7,20 @@ source scripts/lib/path.sh
 
 help() {
     echo -e "
-  Usage: famlydev status
+  Usage: plan status
 
   $(bold status) gives a brief overview of the development environment.
   "
     exit 1
 }
 
-currenst_stack() {
+currenst_plan() {
    echo  $(path_basename $(path_notdir $(readlink docker-compose.yml)))
 }
 
 status() {
     echo ""
-    echo -e "Current stack: $(bold $(currenst_stack))"
+    echo -e "Current plan: $(bold $(currenst_plan))"
     echo ""
     docker ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'
     echo ""
