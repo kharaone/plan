@@ -1,4 +1,4 @@
-# Famly/plan
+# famly/plan
 [famly/plan][famly/plan] is an example of how you can use [Docker][docker], [Make][make], and
 [Bash][bash] to automate your entire development environment and provide a
 nice CLI for common workflows. It's an open-source verison of our internal
@@ -7,7 +7,9 @@ cloned, and modified in any way you please; it's simply providing a starting poi
 hack around with. If you've found a way to improve upon it then feel free to send
 us a pull request ❤️
 
-If you want to know more about the background of *famlydev* and what problems
+![Screenshot of famly/plan help command](https://s3.eu-central-1.amazonaws.com/opensource.famly.co/plan/readme.png)
+
+If you want to know more about the background of [famly/plan][famly/plan] and what problems
 we're trying to solve then read this [blog post][blogpost] by [@mads-hartmann][mads].
 
 ## What's in the box
@@ -23,7 +25,7 @@ specific interface (see some of the other files for examples).
 
 The `presets/*.yml` files are used to specify various subsets of your
 services. At [Famly][famly] we have three at the moment: fullstack, frontend, backend.
-You can switch between them using the `switch` command (e.g. `plan switch frontend`). We're
+You can switch between them using the `switch` command (e.g. `plan switch backend`). We're
 working on a more granular way to specify which services to run but haven't found a good
 solution yet.
 
@@ -35,7 +37,7 @@ be thrown away if you want to use plan for your own projects (though the migrati
 
 ## Requirements
 You need to have [Docker][docker] installed. If you're using [Homebrew][homebrew] simply run
-the following command. Otherwise look [here][docker-install-instructions]
+the following command.
 
 ```bash
 brew install docker
@@ -57,9 +59,22 @@ This will build all the Docker images and start the containers. Open
 `localhost:8080` in your browser and you should see a little introduction
 and a guide.
 
-To see what else plan can do run `plan help`.
-
 ### Commands
+You can always get an overview of the available commands through tab-completion
+or by using the `plan help` command.
+
+- **up** Prepare and run the current plan
+- **build** Build images if necessary
+- **switch `<name>`** Switch to a different plan
+- **follow** Follow logs
+- **status** Gives a brief overview of the development environment
+- **kick `<service>`** Kick a service and hope it helps (sends SIGHUP)
+- **attach `<service>`** Start a Bash shell inside the container
+- **restart `<service>`** Restart a specific container
+- **db `<command>`** Manipulate the database
+- **time** Synchronize the Docker VMs time with the host system
+
+To get more information about the specific command run `plan help <command>`.
 
 ## Contribute
 If you'd like to contribute but need some inspiration then take a look
@@ -92,8 +107,6 @@ adding yet.
 
 
 ## TODO
-- [ ] Write introduction README
-  - [ ] Add a screenshot
 - [ ] Listen to SIGTERM for all containers
 
 [famly]: https://famly.co
@@ -102,5 +115,6 @@ adding yet.
 [make]: https://www.gnu.org/software/make/
 [bash]: https://www.gnu.org/software/bash/
 [zsh]: http://www.zsh.org/
+[homebrew]: http://brew.sh/
 [blogpost]: http://mads-hartmann.com/2017/01/15/automating-developer-environments.html
 [mads]: https://github.com/mads-hartmann
