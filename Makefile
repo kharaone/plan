@@ -8,20 +8,23 @@ services := $(shell docker-compose config --services 2>/dev/null)
 plan := /usr/local/bin/plan
 plan_completions := /usr/local/share/zsh/site-functions/_plan
 
-setup_targets := \
-	docker-compose.yml \
-	$(plan) \
-	$(plan_completions)
-
-build_targets =	\
-	$(addprefix $(build_dir)/, $(addsuffix .build, $(services)))
+setup_targets = docker-compose.yml
+install_targets = $(plan) $(plan_completions)
+build_targets = $(addprefix $(build_dir)/, $(addsuffix .build, $(services)))
 
 #
 # Targets
 #
 
-# Download & configure developer environment.
+# Configure developer environment.
 setup: $(setup_targets)
+
+# Install script and zsh completions.
+install: $(install_targets)
+
+uninstall:
+	$(QUIET)rm -i $(plan)
+	$(QUIET)rm -i $(plan_completions)
 
 # Build local docker images.
 build: setup $(build_targets)

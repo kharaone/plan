@@ -76,11 +76,37 @@ For tab-completion to work in your shell you need to be
 running [Zsh][zsh] for now.
 
 ## Installation & Usage
-To give it a spin run the following commands in your shell.
+To give it a spin simply clone and install famly/plan.
 
 ```bash
 git clone git@github.com:famly/plan && cd plan
 make setup
+```
+
+You can now use the script `./scripts/plan.sh`, however, to get a nicer
+experience we recommend that you install put script in your `$PATH` and
+put `./scripts/plan.completions` on your `fpath`. For your convenience
+we've created a Make target that does just that.
+
+```bash
+make install
+```
+
+This will create the following symlinks:
+
+- /usr/local/share/zsh/site-functions/_plan -> ./script/plan.completions
+- /usr/local/bin/plan -> ./scripts/plan
+
+Currently the Zsh completions will only work if symlinked like this
+somewhere in your `$fpath`; check out [Possible Contributions](#possible-contributions)
+if this is unacceptable to you 😉 You can always remove the symlinks again using
+`make uninstall`.
+
+Once the script is installed simply run
+
+```bash
+# If you haven't started a new terminal session you might need to
+# run compinit for Zsh to pickup the new completion script.
 plan up
 ```
 
@@ -159,6 +185,13 @@ adding yet.
   multiple times which is cumbersome and annoying to maintain. It
   would be great if you could just specify a service once and then
   specify which services to run in a different way.
+
+- **Make symlinks optional**: Some users might prefer not to have symlinks
+ for the script and Zsh completions. The only thing getting in the way of
+ this right now is that `./scripts/plan.completions` needs a way to locate
+ the plan directory in order to invoke the appropriate scripts to get their
+ completions. One way to solve this would be to introduce a `$PLAN_HOME`
+ environment variable and use that if it exists.
 
 ## FAQ
 

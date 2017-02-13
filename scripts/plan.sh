@@ -2,8 +2,15 @@
 
 set -u
 
+if [[ -L "$0" ]]
+then
+    plan_home=$(dirname "$(readlink $0)")
+else
+    plan_home=$(dirname $0)
+fi
+
 # Switch directory to plan.
-cd "$(dirname "$(readlink "$0")")/.." || exit
+cd "${plan_home}/.." || exit
 
 source scripts/lib/colors.sh
 source scripts/lib/functional.sh
