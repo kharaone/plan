@@ -69,7 +69,7 @@ You need to have [Docker][docker] installed. If you're
 using [Homebrew][homebrew] simply run the following command.
 
 ```bash
-brew install docker
+brew cask install docker
 ```
 
 For tab-completion to work in your shell you need to be
